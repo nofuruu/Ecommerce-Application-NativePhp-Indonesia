@@ -66,7 +66,7 @@ $result = $stmt->get_result();
 
 ?>
     
-<nav class="navbar navbar-expand-lg" style="position:fixed; width: 100%; z-index: 10  ;">
+    <nav class="navbar navbar-expand-lg" style="position: fixed; width: 100%; z-index: 9999;">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="../../../public/resource/logoB.png" alt="dslogo" id="dslogo">
@@ -77,73 +77,74 @@ $result = $stmt->get_result();
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="../../../home.php">Home</a>
+        <a class="nav-link" href="../../../home.php">home</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Mygarage</a>
+          <a class="nav-link" href="../../forms/user/garage.php">mygarage</a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="../../forms/user/store-page.php">marketplace</a>
         </li>
-        <li class="nav-item dropdown">
-
+        <li class="nav-item">
+          <a class="nav-link" href="../../forms/user/transaction.php">transaction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../nofuautocar/src/forms/user/store-page.php">about</a>
+        </li>
       </ul>
-      
+</div>
+
+      <!-- Ikon Love dan Chat -->
 
 
 
 
-      <!-- Foto Profil pengguna -->
-      <?php
+        <!-- Foto Profil pengguna -->
+        <?php
+        if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+          $id_user = $_SESSION['id_user'];
 
-    if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-  
-    $id_user = $_SESSION['id_user'];
-    
-    // Query untuk mengambil foto profil dari database
-    $query = "SELECT profilepict FROM users WHERE id_user = '$id_user'";
-    $result = mysqli_query($koneksi, $query);
-    
-    // Cek apakah query berhasil dieksekusi dan ada hasil
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        
-        // Cek apakah pengguna memiliki foto profil, jika tidak, gunakan default.png
-        $profilepict = (!empty($row['profilepict'])) ? "../../../public/uploads/user/" . $row['profilepict'] : "../../../public/uploads/user/default.png";
-    } else {
-        // Jika tidak ada hasil dari query atau pengguna belum memiliki foto profil
-        $profilepict = "../../../public/uploads/user/default.png";
-    }
-    
-    // Tampilkan gambar profil
-    echo '<div class="d-flex ms-auto">
-    <div class="dropdown">
-        <a class="navbar-brand" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="' . htmlspecialchars($profilepict) . '" alt="pfp" id="pfp" class="rounded-circle" width="30" height="30">
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="pfpdr">
-            <li><a class="dropdown-item" href="./profile.php">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="./src/function/logout.php">Logout</a></li>
-            
-        </ul>
-    </div>
-  </div>';
-} else {
-    // Jika pengguna belum login, tampilkan tombol login dan register
-    echo '<div class="d-flex ms-auto">
-            <a href="./src/forms/login.php" class="btn btn-login">Login</a>
-            <a href="./src/forms/register.php" class="btn btn-register ms-2">Register</a>
-          </div>';
-}
-?>
+          // Query untuk mengambil foto profil dari database
+          $query = "SELECT profilepict FROM users WHERE id_user = '$id_user'";
+          $result = mysqli_query($koneksi, $query);
 
+          // Cek apakah query berhasil dieksekusi dan ada hasil
+          if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+
+            // Cek apakah pengguna memiliki foto profil, jika tidak, gunakan default.png
+            $profilepict = (!empty($row['profilepict'])) ? "../../../public/uploads/user/" . $row['profilepict'] : "../../../public/uploads/user/default.png";
+          } else {
+            // Jika tidak ada hasil dari query atau pengguna belum memiliki foto profil
+            $profilepict = "../../../public/uploads/user/default.png";
+          }
+
+          // Tampilkan gambar profil
+          echo '<div class="dropdown">
+                  <a class="navbar-brand" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="' . htmlspecialchars($profilepict) . '" alt="pfp" id="pfp" class="rounded-circle" width="30" height="30">
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="pfpdr">
+                    <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../../function/logout.php">Logout</a></li>
+                  </ul>
+                </div>';
+        } else {
+          // Jika pengguna belum login, tampilkan tombol login dan register
+          echo '<div class="d-flex ms-auto">
+                  <a href="../login.php.php" class="btn btn-login">Login</a>
+                  <a href="../register.php" class="btn btn-register ms-2">Register</a>
+                </div>';
+        }
+        ?>
       </div>
     </div>
   </div>
 </nav>
-<!-- end nav -->
+
+<!-- end navbar -->
+
 
 
 <!-- garage items -->
@@ -165,8 +166,9 @@ $result = $stmt->get_result();
                 SELECT k.id_kendaraan, k.nm_kendaraan, k.harga, k.foto
                 FROM garasi g
                 JOIN kendaraan k ON g.id_kendaraan = k.id_kendaraan
-                WHERE g.id_user = ?
+                WHERE g.id_user = ? AND k.status != 'terjual'
             ";
+
             $stmt = $koneksi->prepare($query);
             $stmt->bind_param("i", $id_user);
             $stmt->execute();
@@ -177,7 +179,7 @@ $result = $stmt->get_result();
                     // Ambil gambar pertama jika ada banyak foto
                     $photos = explode(',', htmlspecialchars($row['foto']));
                     $fotoPath = "../../../public/uploads/admin/item/" . $photos[0]; // Gunakan foto pertama
-
+            
                     echo '<div class="col-md-4 mb-4">
                     <div class="card position-relative">
                         <img src="' . $fotoPath . '" class="card-img-top" alt="Foto Kendaraan" onclick="window.location.href=\'../../function/detail.php?id_kendaraan=' . htmlspecialchars($row['id_kendaraan']) . '\'">
@@ -187,17 +189,18 @@ $result = $stmt->get_result();
                                 <span class="card-price">Rp ' . number_format($row['harga'], 0, ',', '.') . '</span>
                             </div>
                         </div>
-                        <div class="remove-btn" onclick="window.location.href=\'../../function/garage-delete.php?id_kendaraan=' . htmlspecialchars($row['id_kendaraan']) . '\'">
+                        <div class="remove-btn" onclick="deleteCar(' . htmlspecialchars($row['id_kendaraan']) . ')">
                             <i class="fas fa-trash"></i>
                         </div>
                     </div>
                 </div>';
-                                }
+                }            
             } else {
                 echo '<div class="col-12">
-                        <div class="alert alert-warning text-center">Tidak ada kendaraan di garasi Anda.</div>
+                        <div class="alert alert-warning text-center">Tidak ada kendaraan di garasi Anda atau semua kendaraan telah terjual.</div>
                       </div>';
             }
+            
             // Tutup statement dan koneksi
             $stmt->close();
             $koneksi->close();
@@ -243,10 +246,11 @@ $result = $stmt->get_result();
 </body>
 
 <script>
-    function deleteCar(id_kendaraan) {
-        if (confirm('Apakah Anda yakin ingin menghapus kendaraan ini dari garasi?')) {
-        }
+function deleteCar(id_kendaraan) {
+    if (confirm('Apakah Anda yakin ingin menghapus kendaraan ini dari garasi?')) {
+        window.location.href = `../../function/garage-delete.php?id_kendaraan=${id_kendaraan}`;
     }
+}
 </script>
 
 

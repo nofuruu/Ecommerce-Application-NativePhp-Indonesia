@@ -143,6 +143,7 @@ body {
     z-index: 1000;
     transform: translateY(10px); /* Sedikit penyesuaian untuk posisi dropdown */
     margin-left: 10rem;
+    background-color: #2C3E50;
 }
 
 /* Styling khusus untuk layar kecil */
@@ -151,4 +152,98 @@ body {
     box-sizing:border-box;
     margin: 0;
     padding: 0;
+}
+
+
+
+
+
+/* Bagian Utama Kontainer */
+.content-section {
+    padding: 20px;
+    background-color: #f8f9fa; /* Latar belakang abu-abu terang */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+}
+
+.content-section h1 {
+    font-size: 24px;
+    color: #343a40; /* Warna teks utama */
+    margin-bottom: 20px;
+}
+
+/* Tabel Payments */
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: white; /* Latar belakang putih */
+    border-radius: 8px;
+    overflow: hidden; /* Untuk menghindari elemen keluar dari tabel */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+}
+
+.payments-table th, .payments-table td {
+    padding: 10px 15px;
+    text-align: center; /* Posisi teks tengah */
+    border: 1px solid #ddd; /* Garis antar sel */
+}
+
+/* Header Tabel */
+.payments-table th {
+    background-color: #007bff; /* Warna biru */
+    color: white; /* Warna teks putih */
+    text-transform: uppercase; /* Huruf kapital */
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Baris Genap */
+.payments-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Latar belakang abu-abu muda */
+}
+
+/* Efek Hover */
+.payments-table tr:hover {
+    background-color: #e9ecef; /* Warna abu-abu lebih terang */
+}
+
+/* Tombol Update */
+.btn-submit {
+    background-color: #28a745; /* Warna hijau */
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Animasi saat hover */
+}
+
+.btn-submit:hover {
+    background-color: #218838; /* Warna hijau lebih gelap saat hover */
+}
+
+/* Kolom Select */
+.payments-table select {
+    padding: 6px 8px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    background-color: #ffffff;
+    color: #495057;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .payments-table th, .payments-table td {
+        font-size: 12px; /* Ukuran font lebih kecil untuk layar kecil */
+        padding: 8px;
+    }
+
+    .btn-submit {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
 }

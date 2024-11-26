@@ -1,3 +1,16 @@
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Untuk browser Mozilla Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+
 /* Styling untuk Select2 - box luar (single select) */
 .select2-container--default .select2-selection--single {
     width: 25rem !important; /* Lebar box Select2 */
@@ -82,4 +95,203 @@
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
     color: #aaa; /* Warna placeholder */
     font-style: italic; /* Gaya font untuk placeholder */
+}
+
+
+
+/* styling tampilan website */
+
+body {
+    background: rgb(52,157,239);
+    background: radial-gradient(circle, rgba(52,157,239,1) 0%, rgba(0,70,153,1) 100%);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.checkout-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.checkout-card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.checkout-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #343a40;
+}
+
+.checkout-details {
+    margin-bottom: 20px;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 1rem;
+}
+
+.checkout-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-form .form-group {
+    margin-bottom: 15px;
+}
+
+.checkout-form .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.checkout-form .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+}
+
+.checkout-form .form-control:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Base button styling */
+/* Base button styling */
+.btn {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 28px;
+    border-radius: 50px; /* Rounded edges for a sleek look */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Primary button (Proses Pembayaran) */
+.btn-success {
+    background-color: #00b5ad; /* Midtrans-inspired turquoise */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+}
+
+.btn-success:hover {
+    background-color: #008f8a; /* Darker turquoise for hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px); /* Button lifts slightly on hover */
+}
+
+.btn-success:active {
+    background-color: #007f7a; /* Even darker when active */
+    transform: translateY(2px); /* Button presses down slightly */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary button (Kembali) */
+.btn-secondary {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border: 2px solid #dee2e6; /* Light border color */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+    color: #0056b3; /* Change text color on hover */
+    border-color: #0056b3; /* Highlight border on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px); /* Button lifts slightly on hover */
+}
+
+.btn-secondary:active {
+    background-color: #e2e6ea; /* Slightly darker gray when active */
+    transform: translateY(2px); /* Button presses down */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn {
+        font-size: 0.9rem;
+        padding: 10px 24px;
+    }
+}
+
+/* Card styling */
+.detail-card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px; /* Reduced padding */
+    width: 100%; /* Full width */
+    max-width: 500px; /* Reduced max width for better control */
+    margin: 20px auto; /* Center card on page */
+}
+
+/* Title of the card */
+.detail-title {
+    font-size: 1.25rem; /* Smaller title */
+    font-weight: bold;
+    margin-bottom: 15px; /* Reduced margin */
+    text-align: center;
+    color: #343a40;
+}
+
+/* General item styling */
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0; /* Reduced padding */
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.9rem; /* Slightly smaller font for other details */
+}
+
+/* Styling for the price */
+.price {
+    font-size: 0.9rem; /* Smaller font size for the price label */
+    font-weight: bold;
+    margin-bottom: 8px; /* Reduced margin */
+}
+
+.price-amount {
+    font-size: 2rem; /* Smaller size for the price */
+    font-weight: bold;
+    color: #000; /* Black color to make it stand out */
+}
+
+/* Labels styling */
+.checkout-item strong {
+    font-weight: normal;
+    color: #555; /* Slightly lighter color for labels */
+}
+
+/* Value styling */
+.checkout-item span {
+    margin-left: 10px;
+    color: #333; /* Normal text color for other details */
 }

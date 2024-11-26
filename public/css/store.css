@@ -1,14 +1,51 @@
-html, body {
-    height: 100%; /* Full height for the page */
-    margin: 0; /* Remove default margin */
-}
-
 body {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
     font-family: 'Open Sans', sans-serif;
+
+    margin-bottom: 10rem;
 }
+
+.category-navbar {
+    position: relative; /* Agar tetap pada posisi default di bawah navbar utama */
+    background-color: #FAB12F; /* Warna diselaraskan dengan tema */
+    margin-top: 2rem; /* Hilangkan jarak antara navbar */
+    padding: 1px 0; /* Padding lebih tipis untuk estetika */
+    border-top: 1px solid #f0f0f0; /* Garis pemisah halus */
+}
+
+.category-navbar a {
+    display: inline-block;
+    margin: 0 10px; /* Spasi antar tombol */
+    padding: 8px 15px; /* Ukuran tombol yang proporsional */
+    font-size: 14px; /* Ukuran teks */
+    font-weight: bold; /* Teks lebih menonjol */
+    text-decoration: none; /* Hilangkan garis bawah */
+    color: #333; /* Warna teks default */
+    background-color: #ffffff; /* Warna latar belakang tombol */
+    border-radius: 20px; /* Membuat tombol lebih halus */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Memberikan efek bayangan lembut */
+    transition: all 0.3s ease; /* Transisi halus untuk hover */
+}
+
+.category-navbar a:hover {
+    background-color: #333; /* Warna tombol saat hover */
+    color: #fff; /* Warna teks saat hover */
+    transform: scale(1.1); /* Efek memperbesar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan saat hover */
+    border-radius: 25px; /* Sedikit memperhalus radius saat hover */
+}
+
+
+/* Responsif */
+@media (max-width: 768px) {
+    .category-navbar .container {
+        flex-wrap: wrap; /* Susun kategori ke bawah jika layar kecil */
+        gap: 10px; /* Jarak antar tombol */
+    }
+}
+
 
 /* Logo Styling */
 #dslogo {
@@ -252,9 +289,33 @@ body {
     padding: 0;
 }
 
-nav #navbar-kategori{
-    margin-top: 20rem;
-    position:fixed;
-    z-index: 9999;
+
+.hidden {
+    display: none;
 }
 
+
+.card {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Transparan abu-abu */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.overlay span {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}

@@ -22,124 +22,165 @@ include '../../../koneksi.php';
 ?>
 
 <!-- navbar -->
-<nav class="navbar navbar-expand-lg" style="position:fixed; width: 100%; z-index: 9999;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="../../../public/resource/logoB.png" alt="dslogo" id="dslogo">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="../../../home.php">home</a></li>
-                <li class="nav-item"><a class="nav-link" href="../../forms/user/garage.php">mygarage</a></li>
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="../../forms/user/store-page.php">marketplace</a></li>
-                <li class="nav-item dropdown">
-                </li>
-            </ul>
-
-            <!-- Foto Profil pengguna -->
-            <?php
-            if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-                $id_user = $_SESSION['id_user'];
-                $query = "SELECT profilepict FROM users WHERE id_user = '$id_user'";
-                $result = mysqli_query($koneksi, $query);
-                if ($result && mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $profilepict = !empty($row['profilepict']) ? "../../../public/uploads/user/" . $row['profilepict'] : "../../../public/uploads/user/default.png";
-                } else {
-                    $profilepict = "../../../public/uploads/user/default.png";
-                }
-
-                echo '<div class="d-flex ms-auto">
-                        <div class="dropdown">
-                            <a class="navbar-brand" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="' . htmlspecialchars($profilepict) . '" alt="pfp" id="pfp" class="rounded-circle" width="30" height="30">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="pfpdr">
-                                <li><a class="dropdown-item" href="./profile.php">Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="../../function/logout.php">Logout</a></li>
-                            </ul>
-                        </div>
-                      </div>';
-            } else {
-                echo '<div class="d-flex ms-auto">
-                        <a href="../../forms/login.php" class="btn btn-login">Login</a>
-                        <a href="../../forms/register.php.php" class="btn btn-register ms-2">Register</a>
-                      </div>';
-            }
-            ?>
-        </div>
-    </div>
-</nav>
-<!-- end navbar -->
-
-<!-- mini nav -->
-<nav class="navbar navbar-expand navbar-light bg-light" id="navbar-kategori">
-    <ul class="nav navbar-nav">
-        <li class="nav-item active">
-            <a class="nav-link" href="#">Nav 1 <span class="sr-only">(current)</span></a>
+<nav class="navbar navbar-expand-lg" style="position: fixed; width: 100%; z-index: 9999;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="../../../public/resource/logoB.png" alt="dslogo" id="dslogo">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+        <a class="nav-link" href="../../../home.php">home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Nav 2</a>
+          <a class="nav-link" href="../../forms/user/garage.php">mygarage</a>
         </li>
-    </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="../../forms/user/store-page.php">marketplace</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../../forms/user/transaction.php">transaction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../nofuautocar/src/forms/user/store-page.php">about</a>
+        </li>
+      </ul>
+</div>
+
+      <!-- Ikon Love dan Chat -->
+
+
+
+
+        <!-- Foto Profil pengguna -->
+        <?php
+        if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+          $id_user = $_SESSION['id_user'];
+
+          // Query untuk mengambil foto profil dari database
+          $query = "SELECT profilepict FROM users WHERE id_user = '$id_user'";
+          $result = mysqli_query($koneksi, $query);
+
+          // Cek apakah query berhasil dieksekusi dan ada hasil
+          if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+
+            // Cek apakah pengguna memiliki foto profil, jika tidak, gunakan default.png
+            $profilepict = (!empty($row['profilepict'])) ? "../../../public/uploads/user/" . $row['profilepict'] : "../../../public/uploads/user/default.png";
+          } else {
+            // Jika tidak ada hasil dari query atau pengguna belum memiliki foto profil
+            $profilepict = "../../../public/uploads/user/default.png";
+          }
+
+          // Tampilkan gambar profil
+          echo '<div class="dropdown">
+                  <a class="navbar-brand" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="' . htmlspecialchars($profilepict) . '" alt="pfp" id="pfp" class="rounded-circle" width="30" height="30">
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="pfpdr">
+                    <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../../function/logout.php">Logout</a></li>
+                  </ul>
+                </div>';
+        } else {
+          // Jika pengguna belum login, tampilkan tombol login dan register
+          echo '<div class="d-flex ms-auto">
+                  <a href="../login.php.php" class="btn btn-login">Login</a>
+                  <a href="../register.php" class="btn btn-register ms-2">Register</a>
+                </div>';
+        }
+        ?>
+      </div>
+    </div>
+  </div>
 </nav>
 
-
-<!-- end mini -->
-
-
-
+<!-- end navbar -->
 
 
 
 
 <div id="marketplace" class="content-section" style="margin-top: 70px;">
+<div class="category-navbar">
+    <div class="container">
+        <a href="#" class="btn btn-outline-primary category-filter" data-category="mobil">Mobil</a>
+        <a href="#" class="btn btn-outline-primary category-filter" data-category="motor">Motor</a>
+        <a href="#" class="btn btn-outline-primary category-filter" data-category="suv">SUV</a>
+        <a href="#" class="btn btn-outline-primary category-filter" data-category="scooter">Scooter</a>
+        <a href="#" class="btn btn-outline-primary category-filter" data-category="all">All</a>
+    </div>
+</div>
+
+
     <div class="container">
         <div class="row">
             <?php
-            // Query to fetch vehicle data
-          // Fetch vehicle data
-$query = "SELECT id_kendaraan, nm_kendaraan, jenis_kendaraan, tahun, warna, status, harga, foto FROM kendaraan";
-$result = $koneksi->query($query);
+            // Query to fetch all vehicles and sort by status (available first, sold later)
+            $query = "SELECT id_kendaraan, nm_kendaraan, jenis_kendaraan, tahun, warna, status, harga, foto 
+                      FROM kendaraan 
+                      ORDER BY FIELD(status, 'Tersedia') DESC, id_kendaraan DESC";
+            $result = $koneksi->query($query);
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Construct the image path for the first photo
-        // Assuming 'foto' contains a comma-separated list of image names
-        $photos = explode(',', htmlspecialchars($row['foto'])); // Split the photos by comma
-        $fotoPath = "../../../public/uploads/admin/item/" . $photos[0]; // Use the first photo
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $photos = explode(',', htmlspecialchars($row['foto']));
+                    $fotoPath = "../../../public/uploads/admin/item/" . $photos[0];
+                    $kategori = strtolower(htmlspecialchars($row['jenis_kendaraan']));
+                    $status = htmlspecialchars($row['status']);
 
-        echo '<div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="' . $fotoPath . '" class="card-img-top" alt="Foto Kendaraan">
-                <div class="card-body">
-                    <h5 class="card-title">' . htmlspecialchars($row['nm_kendaraan']) . '</h5>
-                    <p class="card-text">Jenis: ' . htmlspecialchars($row['jenis_kendaraan']) . '</p>
-                    <p class="card-text">Tahun: ' . htmlspecialchars($row['tahun']) . '</p>
-                    <p class="card-text">Warna: ' . htmlspecialchars($row['warna']) . '</p>
-                    <p class="card-text">Status: ' . htmlspecialchars($row['status']) . '</p>
-                    <p class="card-text">Harga: Rp ' . number_format($row['harga'], 0, ',', '.') . '</p>
-                    <a href="../../function/detail.php?id_kendaraan=' . htmlspecialchars($row['id_kendaraan']) . '" class="btn btn-primary">View Details</a>
-                </div>
-            </div>
-        </div>';
-    }
-} else {
-    echo '<div class="col-12">
-            <div class="alert alert-warning text-center">Tidak ada kendaraan yang tersedia saat ini.</div>
-          </div>';
-}
-
+                    echo '<div class="col-md-4 mb-4 item ' . $kategori . '">
+                        <div class="card position-relative">
+                            <img src="' . $fotoPath . '" class="card-img-top" alt="Foto Kendaraan">
+                            <div class="card-body">
+                                <h5 class="card-title">' . htmlspecialchars($row['nm_kendaraan']) . '</h5>
+                                <p class="card-text">Jenis: ' . htmlspecialchars($row['jenis_kendaraan']) . '</p>
+                                <p class="card-text">Tahun: ' . htmlspecialchars($row['tahun']) . '</p>
+                                <p class="card-text">Warna: ' . htmlspecialchars($row['warna']) . '</p>
+                                <p class="card-text">Status: ' . htmlspecialchars($row['status']) . '</p>
+                                <p class="card-text">Harga: Rp ' . number_format($row['harga'], 0, ',', '.') . '</p>
+                                <a href="../../function/detail.php?id_kendaraan=' . htmlspecialchars($row['id_kendaraan']) . '" class="btn btn-primary">View Details</a>
+                            </div>';
+                            // Show overlay for sold vehicles
+                            if ($status == 'Terjual') {
+                                echo '<div class="overlay"><span>Terjual</span></div>';
+                            }
+                    echo '</div></div>';
+                }
+            } else {
+                echo '<div class="col-12"><div class="alert alert-warning text-center">Tidak ada kendaraan yang tersedia saat ini.</div></div>';
+            }
             ?>
         </div>
     </div>
 </div>
 
-</body>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+<script>
+    // Category filter logic
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.category-filter').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                var category = this.getAttribute('data-category');
+                document.querySelectorAll('.item').forEach(function(item) {
+                    if (category === 'all' || item.classList.contains(category)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+
+</body>
 </html>

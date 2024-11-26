@@ -41,24 +41,28 @@ session_start();
           <a class="nav-link" href="../nofuautocar/src/forms/user/store-page.php">marketplace</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../nofuautocar/src/forms/user/store-page.php">transaction</a>
+          <a class="nav-link" href="./src/forms/user/transaction.php">transaction</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../nofuautocar/src/forms/user/store-page.php">about</a>
         </li>
       </ul>
+</div>
 
       <!-- Ikon Love dan Chat -->
       <?php
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    echo '<div class="d-flex ms-auto align-items-center">
-       
-        <a href="./src/forms/user/chat.php" class="icon-link me-3">
-            <img src="./public/resource/chats.png" alt="Chat" class="icon-chat">
-        </a>
-    </div>';
+    // Check if the logged-in user has either 'admin' or 'superadmin' role
+    if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'superadmin') {
+        echo '<div class="d-flex ms-auto align-items-center">
+            <a href="./src/forms/admin/admin.php" class="icon-link me-3">
+                <img src="./public/resource/icons/admin.png" alt="Chat" class="icon-chat">
+            </a>
+        </div>';
+    }
 }
 ?>
+
 
 
 
@@ -157,7 +161,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     $categories = [
         ["name" => "Mobil", "image" => "./public/resource/banner/corolla.jpeg", "color" => "#24252a"],
         ["name" => "Motor", "image" => "./public/resource/banner/motor.jpeg", "color" => "#F76707"],
-        ["name" => "Sports Car", "image" => "./public/resource/banner/super.jpg", "color" => "#2F9E44"],
+        ["name" => "SUV", "image" => "./public/resource/banner/Toyota Rush 2006-08.jpeg", "color" => "#2F9E44"],
         ["name" => "Scooter", "image" => "./public/resource/banner/spooki.png", "color" => "#F59F00"]
     ];
 
@@ -168,7 +172,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
         echo '
         <div class="col-md-3 mb-4">
-            <a href="category.php?category=' . urlencode($name) . '" class="category-link text-decoration-none" style="--category-color: ' . $color . ';">
+            <a href="./src/forms/user/store-page.php?category=' . urlencode($name) . '" class="category-link text-decoration-none" style="--category-color: ' . $color . ';">
                 <div class="card h-100 shadow-lg border-0 rounded-lg position-relative overflow-hidden">
                     <div class="card-overlay"></div>
                     <img src="' . $image . '" class="card-img-top" alt="Kategori ' . htmlspecialchars($name) . '">

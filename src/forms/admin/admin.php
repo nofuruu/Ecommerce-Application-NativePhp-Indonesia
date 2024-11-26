@@ -156,9 +156,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
             <img src="' . htmlspecialchars($profilepict) . '" alt="pfp" id="pfp" class="rounded-circle" width="30" height="30">
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="pfpdr">
-            <li><a class="dropdown-item" href="./src/forms/user/profile.php">Profile</a></li>
+            <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="./src/function/logout.php">Logout</a></li>
+            <li><a class="dropdown-item" href="../../function/logout.php">Logout</a></li>
             
         </ul>
     </div>
@@ -189,14 +189,33 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
 
     <div class="content">
-        <!-- Dynamic Content Area -->
-
-        <div id="home" class="content-section" style="display:none;">
-            <h1>Welcome to admin page .. </h1>
-           
-
-</div>    
-
+    <div id="home" class="content-section" style="display:none;">
+    <h1>Welcome to the Admin Dashboard</h1>
+    <p>From here, you can manage various aspects of the platform. Select a section from the sidebar to get started.</p>
+    <div class="overview-cards">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">User Overview</h5>
+                <p class="card-text">Manage and review users on the platform.</p>
+                <a href="#" class="btn btn-primary" onclick="showContent('user')">Go to Users</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Items Overview</h5>
+                <p class="card-text">Manage available items and post new ones.</p>
+                <a href="#" class="btn btn-primary" onclick="showContent('module')">Manage Items</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Payments Overview</h5>
+                <p class="card-text">Review and manage payments made on the platform.</p>
+                <a href="#" class="btn btn-primary" onclick="showContent('payments')">Manage Payments</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -297,7 +316,6 @@ if (is_array($files) && !empty($files)) {
 <!-- fitur lainya -->
 
 <!-- end fitur lainya -->
-
 
 
 
@@ -449,7 +467,6 @@ if (isset($_GET['message'])) {
                 <option value="Mobil">Mobil</option>
                 <option value="Suv">Suv</option>
                 <option value="Scooter">Scooter</option>
-                <option value="Sports Car">Sports car</option>
 
             </select>
         </div>
@@ -534,6 +551,74 @@ document.getElementById('foto').addEventListener('change', function(event) {
         <button type="submit" class="btn btn-primary">Post Vehicle</button>
     </form>
 </div>
+
+
+
+
+
+<div id="payments" class="content-section" style="display:none;">
+    <h1>Payments Management</h1>
+
+    <?php
+    // Ambil data dari tabel transaksi
+    $query = "SELECT * FROM transaksi";
+    $result = mysqli_query($koneksi, $query);
+    ?>
+
+    <div class="container">
+        <h1>Daftar Transaksi</h1>
+        <table class="payments-table">
+            <thead>
+                <tr>
+                    <th>ID Transaksi</th>
+                    <th>Nama Pelanggan</th>
+                    <th>No. KTP</th>
+                    <th>Alamat</th>
+                    <th>Kode Pos</th>
+                    <th>Status Pesanan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <tr>
+                        <td><?= $row['id_transaksi']; ?></td>
+                        <td><?= $row['nama_pelanggan']; ?></td>
+                        <td><?= $row['no_ktp']; ?></td>
+                        <td><?= $row['alamat']; ?></td>
+                        <td><?= $row['kode_pos']; ?></td>
+                        <td>
+                            <!-- Form untuk mengupdate status -->
+                            <form action="update_status.php" method="POST" class="status-form">
+                                <input type="hidden" name="id_transaksi" value="<?= $row['id_transaksi']; ?>">
+                                <select name="status" class="form-control">
+                                    <!-- Menambahkan opsi status -->
+                                    <option value="menunggu persetujuan" <?= $row['status'] == 'menunggu persetujuan' ? 'selected' : ''; ?>>Menunggu Persetujuan</option>
+                                    <option value="bayar sekarang" <?= $row['status'] == 'bayar sekarang' ? 'selected' : ''; ?>>Bayar Sekarang</option>
+                                    <option value="dikirim" <?= $row['status'] == 'dikirim' ? 'selected' : ''; ?>>Dikirim</option>
+                                    <option value="sukses" <?= $row['status'] == 'sukses' ? 'selected' : ''; ?>>Sukses</option>
+                                </select>
+                        </td>
+                        <td>
+                            <!-- Tombol untuk mengupdate status -->
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+                        </form>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -696,6 +781,7 @@ function viewAllPhotos(fotos) {
 
 
 
+
     </div>
     </div>
     <script>
@@ -732,4 +818,31 @@ function showContent(sectionId) {
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    // Ketika tombol submit di dalam form di klik
+    $(".status-form").on("submit", function (e) {
+        e.preventDefault(); // Mencegah form melakukan submit biasa
+
+        var form = $(this); // Form yang dipilih
+        var formData = form.serialize(); // Mengambil semua data dari form
+
+        $.ajax({
+            url: "./update_status.php", // File PHP untuk update status
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Menampilkan pesan sukses
+                alert("Status berhasil diperbarui!");
+            },
+            error: function () {
+                // Menampilkan pesan error jika gagal
+                alert("Terjadi kesalahan saat memperbarui status.");
+            }
+        });
+    });
+});
+</script>
+
 </html>
