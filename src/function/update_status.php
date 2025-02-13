@@ -1,6 +1,5 @@
 <?php
 include '../../koneksi.php'; // Sesuaikan dengan path koneksi database Anda
-header('Content-Type: application/json'); // Mengatur respons menjadi JSON
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_transaksi = $_POST['id_transaksi'];
@@ -8,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validasi input
     if (empty($id_transaksi) || empty($status)) {
-        echo json_encode(["status" => "error", "message" => "ID Transaksi atau Status tidak boleh kosong!"]);
+        // Redirect ke halaman transaction.php dengan pesan error
+        header("Location: ../forms/user/transaction.php?status=error&message=ID Transaksi atau Status tidak boleh kosong!");
         exit;
     }
 
@@ -19,14 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Eksekusi query
     if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "Status berhasil diperbarui!"]);
+        // Redirect ke halaman transaction.php dengan pesan sukses
+        header("Location: ../forms/user/transaction.php?status=success&message=Status berhasil diperbarui!");
+        exit;
     } else {
-        echo json_encode(["status" => "error", "message" => "Gagal memperbarui status: " . $stmt->error]);
+        // Redirect ke halaman transaction.php dengan pesan error
+        header("Location: ../forms/user/transaction.php?status=error&message=Gagal memperbarui status: " . urlencode($stmt->error));
+        exit;
     }
 
     $stmt->close();
 } else {
-    echo json_encode(["status" => "error", "message" => "Akses tidak valid!"]);
+    // Redirect ke halaman transaction.php jika akses tidak valid
+    header("Location: ../forms/user/transaction.php?status=error&message=Akses tidak valid!");
+    exit;
 }
 
 $koneksi->close();

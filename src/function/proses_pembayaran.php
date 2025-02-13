@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Menyimpan file ke folder uploads
-    $upload_dir = '../../public/uploads/bukti_pembayaran';
+    $upload_dir = '../../public/uploads/bukti_pembayaran/';
     $file_name = time() . '-' . basename($bukti_pembayaran['name']);
     $file_path = $upload_dir . $file_name;
 

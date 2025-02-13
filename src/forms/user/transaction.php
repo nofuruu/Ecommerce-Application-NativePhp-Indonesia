@@ -15,6 +15,14 @@
 include '../../../koneksi.php';
 session_start();
 
+// Display session message if exists
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    echo '<div class="alert alert-' . ($message['type'] == 'error' ? 'danger' : 'success') . ' text-center">' . $message['text'] . '</div>';
+    // Clear the message after displaying
+    unset($_SESSION['message']);
+}
+
 // Pastikan pengguna telah login
 if (!isset($_SESSION['id_user'])) {
     echo '<div class="alert alert-danger text-center">Anda harus login terlebih dahulu.</div>';
@@ -64,32 +72,45 @@ $result = $stmt->get_result();
                     
                     // Tentukan warna status
                     $status_class = ($status == 'menunggu persetujuan') ? 'text-warning' : 
-                                    (($status == 'bayar sekarang') ? 'text-success' : 'text-danger');
-                                    ($status == 'menunggu persetujuan') ? 'text-primary' : 
-                                    (($status == 'sukses') ? 'text-success' : 'text-success');
+                                    (($status == 'bayar sekarang') ? 'text-success' : 
+                                    (($status == 'sukses') ? 'text-success' : 'text-danger'));
 
 
-                    
                     echo '<div class="col-md-4 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Transaksi ' . $id_kendaraan . '</h5>
                                     <p class="card-text">Pelanggan: ' . $nama_pelanggan . '</p>
                                     <p class="card-text">Metode Pembayaran: ' . $metode_pembayaran . '</p>
-                                    <p class="card-text ' . $status_class . '">Status: ' . $status . '</p>';
+                                    <p class="card-text ' . $status_class . '">Status: ' . $status . '</p>' ;
 
                     // Tombol Bayar jika status adalah "bayar sekarang"
                     if ($status == 'bayar sekarang') {
                         echo '<button class="btn btn-primary btn-sm" onclick="showPaymentModal(' . $id_transaksi . ')">Bayar</button>';
                     }
+                    if ($status == 'bayar sekarang') {
+                        echo '<form action="../../function/batalkan_transaksi.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="id_transaksi" value="' . $id_transaksi . '">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Anda yakin ingin membatalkan transaksi ini?\')">Batal</button>
+                      </form>';
+                    }
 
                     // Tombol Batalkan jika statusnya masih dalam keadaan "menunggu persetujuan"
                     if ($status == 'menunggu persetujuan') {
-                        echo '<a href="../../function/batalkan_transaksi.php?id_transaksi=' . $id_transaksi . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Anda yakin ingin membatalkan transaksi ini?\')">Batal</a>';
+                        echo '<form action="../../function/batalkan_transaksi.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="id_transaksi" value="' . $id_transaksi . '">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Anda yakin ingin membatalkan transaksi ini?\')">Batal</button>
+                      </form>';
                     }
-                    // if ($status == 'dikirim') {
-                    //     echo '<button class="btn btn-success btn-sm mt-2" onclick="confirmDelivery(' . $id_transaksi . ')">Konfirmasi Sukses</button>';
-                    // }
+                    
+                    // Tombol Konfirmasi jika status adalah 'dikirim'
+                    if ($status == 'dikirim') {
+                        echo '
+                        <form action="../../function/proses_sukses.php" method="POST" class="d-inline">
+                            <input type="hidden" name="id_transaksi" value="' . $id_transaksi . '">
+                            <button type="submit" class="btn btn-success">Konfirmasi Kendaraan Sukses</button>
+                        </form>';
+                    }
 
                     echo '   </div>
                           </div>
@@ -103,6 +124,7 @@ $result = $stmt->get_result();
     </div>
 </div>
 
+
 <footer>
     <div class="footer-content">
         <h3>NofuAuto</h3>
@@ -113,25 +135,18 @@ $result = $stmt->get_result();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-3sL4rdLfJxHLi8YgljFBAyRXn0AF6EJcBlpd/izBTHzkr9zE3Q1uKs96/6FcmgiQ" crossorigin="anonymous"></script>
 
 <script>
-// Fungsi untuk menampilkan SweetAlert2 modal
 function showPaymentModal(id_transaksi) {
-    // Generate nomor rekening acak
     var nomor_rekening = '123' + Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
     
-    // Tampilkan SweetAlert2 modal
     Swal.fire({
         title: 'Informasi Pembayaran',
         html: `
             <p><strong>Nomor Rekening:</strong> ${nomor_rekening}</p>
             <p>Silakan transfer ke nomor rekening di atas sesuai dengan metode pembayaran yang dipilih.</p>
-            <form action="../../function/proses_pembayaran.php" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="id_transaksi" value="${id_transaksi}">
-                <div class="mb-3">
-                    <label for="buktiPembayaran" class="form-label">Upload Bukti Pembayaran</label>
-                    <input type="file" class="form-control" id="buktiPembayaran" name="bukti_pembayaran" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Konfirmasi Pembayaran</button>
-            </form>
+            <div class="mb-3">
+                <label for="buktiPembayaran" class="form-label">Upload Bukti Pembayaran</label>
+                <input type="file" class="form-control" id="buktiPembayaran" name="bukti_pembayaran" required>
+            </div>
         `,
         showCancelButton: true,
         confirmButtonText: 'Kirim',
@@ -142,74 +157,41 @@ function showPaymentModal(id_transaksi) {
             const fileInput = document.getElementById('buktiPembayaran');
             if (!fileInput.files[0]) {
                 Swal.showValidationMessage('Harap unggah bukti pembayaran.');
+                return false;
             }
-        }
-    });
-}
-</script>
-<script>
-// Fungsi untuk menampilkan konfirmasi pembayaran
-function confirmPayment(id_transaksi) {
-    Swal.fire({
-        title: 'Informasi Pembayaran',
-        html: `
-            <p><strong>Nomor Rekening:</strong> ${nomor_rekening}</p>
-            <p>Silakan transfer ke nomor rekening di atas sesuai dengan metode pembayaran yang dipilih.</p>
-            <form action="../../function/proses_pembayaran.php" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="id_transaksi" value="${id_transaksi}">
-                <div class="mb-3">
-                    <label for="buktiPembayaran" class="form-label">Upload Bukti Pembayaran</label>
-                    <input type="file" class="form-control" id="buktiPembayaran" name="bukti_pembayaran" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Konfirmasi Pembayaran</button>
-            </form>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Kirim',
-        cancelButtonText: 'Batal',
-        focusConfirm: false,
-        width: '500px',
-        preConfirm: () => {
-            const fileInput = document.getElementById('buktiPembayaran');
-            if (!fileInput.files[0]) {
-                Swal.showValidationMessage('Harap unggah bukti pembayaran.');
-            }
+            // Kirim data menggunakan FormData AJAX
+            var formData = new FormData();
+            formData.append("id_transaksi", id_transaksi);
+            formData.append("bukti_pembayaran", fileInput.files[0]);
+
+            return fetch('../../function/proses_pembayaran.php', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Kesalahan server!');
+                }
+                return response.json();
+            }).then(data => {
+                if (data.status === "success") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pembayaran Dikonfirmasi',
+                        text: 'Bukti pembayaran berhasil diunggah.',
+                        confirmButtonText: 'Tutup'
+                    }).then(() => {
+                        location.reload(); // Reload halaman untuk memperbarui status
+                    });
+                } else {
+                    throw new Error(data.message || 'Gagal mengunggah bukti pembayaran.');
+                }
+            }).catch(error => {
+                Swal.showValidationMessage(`Request failed: ${error}`);
+            });
         }
     });
 }
 
-// Fungsi untuk menghandle form submission
-$('form').submit(function(event) {
-    event.preventDefault(); // Mencegah form dari submit default
-    var formData = new FormData(this);
-
-    $.ajax({
-        type: "POST",
-        url: "../../function/proses_pembayaran.php",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            let data = JSON.parse(response);
-            if (data.status === "success") {
-                // Menampilkan modal sukses dengan centang hijau
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Pembayaran Dikonfirmasi',
-                    text: 'Bukti pembayaran berhasil diunggah dan status transaksi diperbarui.',
-                    confirmButtonText: 'Tutup'
-                }).then(() => {
-                    location.reload(); // Reload halaman untuk memperbarui status transaksi
-                });
-            } else {
-                Swal.fire('Gagal!', data.message, 'error');
-            }
-        },
-        error: function() {
-            Swal.fire('Gagal!', 'Terjadi kesalahan dalam menghubungi server.', 'error');
-        }
-    });
-});
 </script>
 
 

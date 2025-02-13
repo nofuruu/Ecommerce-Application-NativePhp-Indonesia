@@ -74,7 +74,7 @@
         </div>
         <button type="submit" class="btn btn-submit" id="btn-submit">Login</button>        <p class="text-center mt-3">Belum memiliki akun? <a href="../forms/register.php" class="link">Register</a></p>
         <p class="text-center mt-3"><a href="../../home.php" class="link">Lanjutkan tanpa akun</a></p>
-      </form>
+      </form> 
     </div>
   </div>
 

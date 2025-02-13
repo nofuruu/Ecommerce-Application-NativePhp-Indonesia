@@ -1,5 +1,6 @@
 <?php
 include '../../koneksi.php';
+
 session_start();
 
 // Pastikan pengguna telah login
@@ -29,17 +30,32 @@ if ($result->num_rows === 0) {
     exit;
 }
 
+// Mendapatkan id_kendaraan dari transaksi untuk diubah statusnya
+$transaksi = $result->fetch_assoc();
+$id_kendaraan = $transaksi['id_kendaraan']; // Pastikan kolom id_kendaraan ada di tabel transaksi
+
 // Query untuk menghapus transaksi
 $delete_query = "DELETE FROM transaksi WHERE id_transaksi = ?";
 $delete_stmt = $koneksi->prepare($delete_query);
 $delete_stmt->bind_param("i", $id_transaksi);
 
 if ($delete_stmt->execute()) {
-    // Jika berhasil, arahkan kembali ke halaman transaksi
-    header('Location: ../forms/user/transaction.php?status=cancel_success');
-    exit;
+    // Jika berhasil menghapus transaksi, ubah status kendaraan menjadi "Tersedia"
+    $update_query = "UPDATE kendaraan SET status = 'Tersedia' WHERE id_kendaraan = ?";
+    $update_stmt = $koneksi->prepare($update_query);
+    $update_stmt->bind_param("i", $id_kendaraan);
+
+    if ($update_stmt->execute()) {
+        // Jika berhasil, arahkan kembali ke halaman transaksi
+        header('Location: ../forms/user/transaction.php?status=cancel_success');
+        exit;
+    } else {
+        // Jika gagal mengubah status kendaraan, tampilkan pesan error
+        header('Location: ../forms/user/transaction.php?error=update_status_failed');
+        exit;
+    }
 } else {
-    // Jika gagal, arahkan kembali dengan pesan error
+    // Jika gagal menghapus transaksi, arahkan kembali dengan pesan error
     header('Location: ../forms/user/transaction.php?error=cancel_failed');
     exit;
 }

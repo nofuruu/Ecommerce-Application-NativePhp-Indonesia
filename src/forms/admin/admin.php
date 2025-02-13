@@ -576,6 +576,7 @@ document.getElementById('foto').addEventListener('change', function(event) {
                     <th>Alamat</th>
                     <th>Kode Pos</th>
                     <th>Status Pesanan</th>
+                    <th>Bukti Pembayaran</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -600,9 +601,19 @@ document.getElementById('foto').addEventListener('change', function(event) {
                                 </select>
                         </td>
                         <td>
+                            <?php if (!empty($row['bukti_pembayaran'])) { ?>
+                                <!-- Gambar klik dengan modal -->
+                                <a href="#!" onclick="showModal('../../../public/uploads/bukti_pembayaran/<?= $row['bukti_pembayaran']; ?>')">
+                                    <img src="../../../public/uploads/bukti_pembayaran/<?= $row['bukti_pembayaran']; ?>" alt="Bukti Pembayaran" style="width: 100px; height: auto; cursor: pointer;">
+                                </a>
+                            <?php } else { ?>
+                                <span>Tidak ada bukti</span>
+                            <?php } ?>
+                        </td>
+                        <td>
                             <!-- Tombol untuk mengupdate status -->
                             <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
-                        </form>
+                            </form>
                         </td>
                     </tr>
                 <?php } ?>
@@ -611,8 +622,13 @@ document.getElementById('foto').addEventListener('change', function(event) {
     </div>
 </div>
 
-
-
+<!-- Modal untuk menampilkan gambar -->
+<div id="imageModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="Bukti Pembayaran" style="width: 100%; height: auto;">
+    </div>
+</div>
 
 
 
@@ -843,6 +859,21 @@ $(document).ready(function () {
         });
     });
 });
+</script>
+
+<script>
+    function showModal(imageUrl) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    modalImage.src = imageUrl;
+    modal.style.display = "block";
+}
+
+function closeModal() {
+    const modal = document.getElementById("imageModal");
+    modal.style.display = "none";
+}
+
 </script>
 
 </html>
